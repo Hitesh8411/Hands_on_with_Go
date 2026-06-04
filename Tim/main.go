@@ -263,12 +263,11 @@ we can add, delate and change whats inside of it
 // import "fmt"
 
 // func main() {
-// 	// var mp map[string]int = map[string]int{"a":1} 
+// 	// var mp map[string]int = map[string]int{"a":1}
 //      mp := map[string]int{"a":1}
 
 // 	fmt.Println(mp)
 // }
-
 
 // creating a MAP
 
@@ -292,26 +291,24 @@ we can add, delate and change whats inside of it
 // func main() {
 //     // Create map
 //     countryCapitalMap := make(map[string]string)
-    
+
 //     // Add key-value pairs
 //     countryCapitalMap["France"] = "Paris"
 //     countryCapitalMap["Italy"] = "Rome"
 //     countryCapitalMap["Spain"] = "Madrid"
-    
+
 //     fmt.Println(countryCapitalMap)
 //     // Output: map[France:Paris Italy:Rome Spain:Madrid]
-    
+
 //     // Update existing key
 //     countryCapitalMap["France"] = "Lyon"  // Overwrites
 //     fmt.Println(countryCapitalMap["France"])  // Output: Lyon
 // }
 
-
 ///Functions
 // have to define the types of our Functions:
 
-
-// package main 
+// package main
 // import "fmt"
 
 // func add(num1 int, num2 int) int{
@@ -323,9 +320,8 @@ we can add, delate and change whats inside of it
 // 	fmt.Println(value)
 // }
 
-
 // --
-// package main 
+// package main
 // import "fmt"
 
 // func callFunc(callable func(int) int) int {
@@ -333,7 +329,7 @@ we can add, delate and change whats inside of it
 // }
 
 // func doubleNumber(num int) int {
-// 	return 2 * num 
+// 	return 2 * num
 // }
 
 // func main() {
@@ -341,10 +337,9 @@ we can add, delate and change whats inside of it
 // 	fmt.Println(value)
 // }
 
+//
 
-// 
-
-// package main 
+// package main
 // import "fmt"
 
 // func sum(nums ...int) int {
@@ -356,20 +351,172 @@ we can add, delate and change whats inside of it
 // 	fmt.Println(s);
 // }
 
-
 // named returnd values
-package main
-import "fmt"
+// package main
+// import "fmt"
 
-func sum(nums ...int) (s int) {
-	for _, value := range nums {
-		s += value
+// func sum(nums ...int) (s int) {
+// 	for _, value := range nums {
+// 		s += value
+// 	}
+// 	return
+
+// }
+
+// func main() {
+// 	s := sum([]int{25,10,3,3,50,70}...)
+// 	fmt.Println(s)
+// }
+
+///=====================================================
+/// ADV GO
+
+//Structs in Go
+// usesd to group related data together
+// field access trough dot noation only  user.name
+// dynamic bracket notation does not exist without using complex reflection  user["name"]
+//Anonymous structs are useful for temporary data structures
+
+// In Go, you must declare a strict blueprint using the type and struct keywords before creating an instance. JavaScript allows you to just create objects inline on the fly.
+
+// Blueprint is mandatory
+// package main
+
+// import "fmt"
+// type User struct {
+//     Name string
+//     Age  int
+// }
+
+// func main() {
+//     // Initialization
+//     u := User{Name: "Alice", Age: 30}
+// 	fmt.Println(u)
+// }
+
+/*
+type StructName struct {
+    fieldName1 type1
+    fieldName2 type2
+    fieldName3 type3
+}*/
+
+// exported name -> start with capital letter
+
+// embedded structs
+/*An embedded struct is created by declaring a field inside a struct without a field name (anonymous field). Go automatically pulls the inner struct's fields up to the outer struct. This is called field promotion.Syntax: Just the type name is listed.Behavior: You can access the inner fields directly as if they belonged to the outer struct.
+JS Equivalent: It acts similarly to copying properties using the spread operator (...) or extending a class.*/
+
+// package main
+
+// import "fmt"
+
+// type Dimensions struct {
+//     Width  int
+//     Height int
+// }
+
+// type Box struct {
+//     Dimensions // Embedded struct (No field name given)
+//     Material   string
+// }
+
+// func main() {
+//     b := Box{Material: "Cardboard"}
+
+//     // Field Promotion: Access width directly!
+//     b.Width = 10
+
+//     // You can still access it via the type name if you want:
+//     b.Dimensions.Height = 20
+// 	fmt.Println(b);
+// }
+
+//Interfaces:
+// an interface is a named collection of method signatures that defines behavior without implementation.
+
+// package main
+
+// import "fmt"
+
+// type Shape interface{
+// 	getPerimeter() uint
+// }
+
+// type Triangle struct {
+// 	sidea uint
+// 	sideb uint
+// 	sidec uint
+// }
+
+// func ( t Triangle) getPerimeter()  uint {
+// 	return t.sidea + t.sideb + t.sidec
+// }
+// func (t Triangle) getSides() []uint{
+// 	return []uint{t.sidea, t.sideb, t.sidec}
+// }
+// func main() {
+// 	var s Shape = Triangle{1,2,3}
+// 	fmt.Println(s.getPerimeter())
+// }
+
+// grabbing the perimeters of all of our difrent shapes
+
+// implement all of the methods that are definned on it
+// creating a flexible to be viewed
+// Interfaces are all over the place and the main goal of them is that we abstarct away from the implementaion of our strucks
+
+// Error Handling
+
+//defer
+// panic  - (won't run below code if we define panic)
+
+// we can handle panic using the recover so its enable get rid from the panic error
+// when recover occured , panic will not run
+
+// and put recover in deferred function always
+
+// ================================================
+
+// Generics : Generics (also called type parameters) were added in Go 1.18. They allow you to write functions and data structures that work with multiple types while maintaining type safety.
+
+// package main
+
+// import "fmt"
+
+// // Generic function - T is a type parameter
+// func PrintSlice[T any](s []T) {
+//     for i, v := range s {
+//         fmt.Printf("Index %d: %v\n", i, v)
+//     }
+// }
+
+// func main() {
+//     // Works with any type
+//     nums := []int{1, 2, 3, 4}
+//     strs := []string{"a", "b", "c"}
+
+//     PrintSlice(nums)      // Type inference: T = int
+//     PrintSlice(strs)      // Type inference: T = string
+// }
+
+/*
+	func FunctionName[TypeParam TypeConstraint](params) returnType {
+	    // Use TypeParam as a type
 	}
-	return
+*/
+// package main
 
-}
+// import "fmt"
 
-func main() {
-	s := sum([]int{25,10,3,3,50,70}...)
-	fmt.Println(s)
-}
+// type GenericSlice[T any] []T
+// func (g GenericSlice[T]) Print()  {
+// 	for _, value := range g{
+// 		fmt.Println(value)
+// 	}
+// }
+
+// func main() {
+// 	g:=GenericSlice[int]{1,2,3}
+// 	g.Print()
+// }
