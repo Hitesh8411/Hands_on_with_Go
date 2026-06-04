@@ -10,7 +10,7 @@
 // 	// y,err := strconv.Atoi(x)
 // 	y,err := strconv.ParseInt(x,2,0)
 // 	fmt.Println(y,err)
-// }
+// }t
 
 //ParseInt , ParseBloat, ParseBool
 
@@ -373,4 +373,3 @@ func main() {
 	s := sum([]int{25,10,3,3,50,70}...)
 	fmt.Println(s)
 }
-
