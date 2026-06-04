@@ -520,3 +520,74 @@ JS Equivalent: It acts similarly to copying properties using the spread operator
 // 	g:=GenericSlice[int]{1,2,3}
 // 	g.Print()
 // }
+
+
+// Pointers and References
+// package main
+
+// import "fmt"
+
+// func main() {
+//     // Regular variable
+//     i := 42
+    
+//     // Create pointer (get address with &)
+//     p := &i
+    
+//     fmt.Println(i)  // 42 (value)
+//     fmt.Println(&i) // memory address, e.g., 0x42131100
+//     fmt.Println(p)  // memory address, e.g., 0x42131100
+    
+//     // Dereference pointer (get value at address with *)
+//     fmt.Println(*p)  // 42 (value at address p points to)
+    
+//     // Modify through pointer
+//     *p = 21
+//     fmt.Println(i)   // 21 (original variable changed!)
+//     fmt.Println(*p)  // 21
+// }
+
+// Pointer with Structs
+
+// package main
+
+// import "fmt"
+
+// func main() {
+// 	x := 0
+// 	y := &x
+// 	z := &y
+
+// 	fmt.Println(x,y,z)
+
+// 	*y=2 
+// 	fmt.Println(x)
+// }
+
+// package main
+
+// import "fmt"
+
+// func test(pointerSlice *[]*int) {
+// 	values := *pointerSlice
+
+// 	for _, value := range values {
+// 		value
+// 	}
+// }
+
+// func main() {
+// 	a := 1
+// 	b := 2
+// 	values := &[]*int{&a, &b}
+
+	
+// }
+/*
+Threading and Concurrency 
+Concurrency : Handling multiple tasks progress simultaneously (not necessarily same instant) medium 
+Parallelism : Executing multiple tasks at the exact same time on multiple cores medium
+Goroutine   :Lightweight thread managed by Go runtime (not OS) medium             
+Channel     :Communication mechanism between goroutines                            
+
+*/
