@@ -521,7 +521,6 @@ JS Equivalent: It acts similarly to copying properties using the spread operator
 // 	g.Print()
 // }
 
-
 // Pointers and References
 // package main
 
@@ -530,17 +529,17 @@ JS Equivalent: It acts similarly to copying properties using the spread operator
 // func main() {
 //     // Regular variable
 //     i := 42
-    
+
 //     // Create pointer (get address with &)
 //     p := &i
-    
+
 //     fmt.Println(i)  // 42 (value)
 //     fmt.Println(&i) // memory address, e.g., 0x42131100
 //     fmt.Println(p)  // memory address, e.g., 0x42131100
-    
+
 //     // Dereference pointer (get value at address with *)
 //     fmt.Println(*p)  // 42 (value at address p points to)
-    
+
 //     // Modify through pointer
 //     *p = 21
 //     fmt.Println(i)   // 21 (original variable changed!)
@@ -560,7 +559,7 @@ JS Equivalent: It acts similarly to copying properties using the spread operator
 
 // 	fmt.Println(x,y,z)
 
-// 	*y=2 
+// 	*y=2
 // 	fmt.Println(x)
 // }
 
@@ -581,13 +580,219 @@ JS Equivalent: It acts similarly to copying properties using the spread operator
 // 	b := 2
 // 	values := &[]*int{&a, &b}
 
-	
 // }
 /*
-Threading and Concurrency 
-Concurrency : Handling multiple tasks progress simultaneously (not necessarily same instant) medium 
+Threading and Concurrency
+Concurrency : Handling multiple tasks progress simultaneously (not necessarily same instant) medium
 Parallelism : Executing multiple tasks at the exact same time on multiple cores medium
-Goroutine   :Lightweight thread managed by Go runtime (not OS) medium             
-Channel     :Communication mechanism between goroutines                            
+Goroutine   :Lightweight thread managed by Go runtime (not OS) medium
+Channel     :Communication mechanism between goroutines
 
 */
+
+//GORoutines
+
+// package main
+
+// import (
+//     "fmt"
+//     "time"
+// )
+
+// func sayHello(msg string) {
+//     for i := 0; i < 3; i++ {
+//         fmt.Println(msg)
+//         time.Sleep(1000* time.Millisecond)
+//     }
+// }
+
+// func main() {
+//     // Sequential call - runs in main goroutine
+//     sayHello("sequential")
+
+//     // Goroutine - runs concurrently
+//     go sayHello("goroutine 1")
+//     go sayHello("goroutine 2")
+
+//     // Give goroutines time to complete
+//     time.Sleep(time.Second)
+
+//     fmt.Println("Main goroutine finished")
+// }
+
+// deadlock occurs when no threads are under execution
+
+// func add (x int, y int, ch chan int) {
+// 	time.Sleep(5 * time.Second)
+// 	// ch <- x + y   // if remove we got deadlock error (all goroutines are asleep)
+
+// }
+// func main() {
+// 	ch := make(chan int)
+// 	go add(5,10, ch)
+// 	x := <-ch
+// 	fmt.Println(x)
+// }
+
+// package main
+
+// import (
+//     "fmt"
+
+// )
+
+// func add (x int, y int, ch chan int) {
+// 	fmt.Println(x + y)
+// 	ch <- x + y
+// }
+// func main() {
+// 	ch := make(chan int)
+// 	go add(5,20,ch)
+// 	go add(5,30,ch)
+// 	go add(4,24,ch)
+// 	go add(2,44,ch)
+// 	go add(1,77,ch)
+//     x := <-ch
+// 	fmt.Println(x)
+// }
+
+// package main
+
+// import (
+//     "fmt"
+
+// )
+
+// func add (x int, y int, ch chan int) {
+// 	fmt.Println(x + y)
+// 	ch <- x + y
+// }
+// func main() {
+// 	ch := make(chan int)
+// 	go add(5,20,ch)
+// 	x := <-ch
+// 	go add(5,30,ch)
+// 	y:= <-ch
+// 	go add(4,24,ch)
+// 	z:= <-ch
+// 	go add(2,44,ch)
+// 	a := <-ch
+// 	go add(1,77,ch)
+//     b := <-ch
+
+// 	fmt.Println(x,y,z,a,b)
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"time"
+// )
+
+// func add (x int, y int, ch chan int, delay int) {
+// 	time.Sleep(time.Duration(delay) * time.Second)
+// 	// fmt.Println(x + y)
+// 	ch <- x + y
+// }
+// func main() {
+// 	ch := make(chan int)
+// 	ch2 :=make (chan int)
+
+// 	go add(10,5,ch,2)
+// 	go add(20,15,ch2,2)
+
+// 	for i := 0; i<2; i++ {
+// 		select{
+// 		case x := <-ch:
+// 			fmt.Println(x)
+// 		case y := <-ch2:
+// 			fmt.Println(y)
+// 		}
+// 	}
+	
+
+// unbuffered channel (Sync)
+
+// package main
+
+// import "fmt"
+
+// func main() {
+//     ch := make(chan int)  // Unbuffered
+    
+//     go func() {
+//         ch <- 42  // Blocks until someone receives
+//     }()
+    
+//     fmt.Println(<-ch)  // Output: 42 (blocks until goroutine sends)
+// }
+
+// buffered channel (async)
+
+// package main
+
+// import "fmt"
+
+// func main() {
+//     ch := make(chan int, 3)  // Buffered, queue size 3
+    
+//     ch <- 1  // Doesn't block (queue has space)
+//     ch <- 2  // Doesn't block
+//     ch <- 3  // Doesn't block
+    
+//     // ch <- 4  // Would block (queue full)
+    
+//     fmt.Println(<-ch)  // Output: 1
+//     fmt.Println(<-ch)  // Output: 2
+//     fmt.Println(<-ch)  // Output: 3
+// }
+
+
+// Mutex (Protecting Shared Data)
+
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+type Counter struct {
+    mu    sync.Mutex
+    value int
+}
+
+func (c *Counter) Increment() {
+    c.mu.Lock()      // Lock
+    defer c.mu.Unlock() // Unlock when done
+    
+    c.value++
+}
+
+func (c *Counter) GetValue() int {
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    return c.value
+}
+
+func main() {
+    counter := &Counter{}
+    var wg sync.WaitGroup
+    
+    // 100 goroutines incrementing
+    for i := 0; i < 100; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            counter.Increment()
+        }()
+    }
+    
+    wg.Wait()
+    fmt.Println("Final value:", counter.GetValue())  // Output: 100
+}
+
+//Running Multiple Thread in Goroutines
+// what channels are , how can pass value between diffrent Threads
+// how to use weight Group and locks to synchronize the execution of code
